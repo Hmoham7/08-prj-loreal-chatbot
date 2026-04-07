@@ -6,18 +6,41 @@ const chatWindow = document.getElementById("chatWindow");
 // Show the first message when the page loads.
 chatWindow.textContent = "👋 Hello! How can I help you today?";
 
-const workerUrl = "https://wonderwoman9.hmoham7.workers.dev/";
+const wonderwoman9URL = "https://wonderwoman9.hmoham7.workers.dev/";
 
 /* Run this code when the user clicks Send */
-chatForm.addEventListener("submit", (e) => {
+chatForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  // Beginner note:
-  // Later, replace this with a real API request.
-  // Send a `messages` array and read: data.choices[0].message.content
+  const question = userInput.value.trim();
 
-  // Temporary output so students can test the UI first.
-  chatWindow.innerHTML = "Connect to the OpenAI API for a response!";
+  // Stop early if the input is empty.
+  if (!question) {
+    chatWindow.textContent = "Please type a question first.";
+    return;
+  }
+
+  // Show a loading message while waiting for the server.
+  chatWindow.textContent = "Thinking...";
+
+  try {
+    // Send the user's question to your Worker URL.
+    const response = await fetch(wonderwoman9URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message: question }),
+    });
+
+    const data = await response.json();
+
+    // Show whichever text field is returned by the API.
+    chatWindow.textContent =
+      data.reply || data.response || data.message || "No response received.";
+  } catch (error) {
+    chatWindow.textContent = "Something went wrong. Please try again.";
+  }
 
   // Clear the input box for the next message.
   userInput.value = "";
