@@ -6,6 +6,8 @@ const chatWindow = document.getElementById("chatWindow");
 // Show the first message when the page loads.
 chatWindow.textContent = "👋 Hello! How can I help you today?";
 
+const workerUrl = "https://wonderwoman9.hmoham7.workers.dev/";
+
 /* Run this code when the user clicks Send */
 chatForm.addEventListener("submit", (e) => {
   e.preventDefault();
