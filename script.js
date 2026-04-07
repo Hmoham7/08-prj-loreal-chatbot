@@ -1,18 +1,22 @@
-/* DOM elements */
+/* Grab the main elements from the page */
 const chatForm = document.getElementById("chatForm");
 const userInput = document.getElementById("userInput");
 const chatWindow = document.getElementById("chatWindow");
 
-// Set initial message
+// Show the first message when the page loads.
 chatWindow.textContent = "👋 Hello! How can I help you today?";
 
-/* Handle form submit */
+/* Run this code when the user clicks Send */
 chatForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
-  // When using Cloudflare, you'll need to POST a `messages` array in the body,
-  // and handle the response using: data.choices[0].message.content
+  // Beginner note:
+  // Later, replace this with a real API request.
+  // Send a `messages` array and read: data.choices[0].message.content
 
-  // Show message
+  // Temporary output so students can test the UI first.
   chatWindow.innerHTML = "Connect to the OpenAI API for a response!";
+
+  // Clear the input box for the next message.
+  userInput.value = "";
 });
