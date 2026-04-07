@@ -24,12 +24,10 @@ chatForm.addEventListener("submit", async (e) => {
   chatWindow.textContent = "Thinking...";
 
   try {
-    // Send the user's question in the `messages` format the Worker expects.
+    // Send a plain text body (still JSON formatted) to avoid a CORS preflight.
+    // The Worker can still parse this with request.json().
     const response = await fetch(mohamedHasnaaURL, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
         messages: [{ role: "user", content: question }],
       }),
