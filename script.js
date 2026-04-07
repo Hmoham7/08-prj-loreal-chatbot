@@ -6,7 +6,7 @@ const chatWindow = document.getElementById("chatWindow");
 // Show the first message when the page loads.
 chatWindow.textContent = "👋 Hello! How can I help you today?";
 
-const wonderwoman9URL = "https://wonderwoman9.hmoham7.workers.dev/";
+const mohamedHasnaaURL = "https://mohamed-hasnaa.hmoham7.workers.dev/";
 
 /* Run this code when the user clicks Send */
 chatForm.addEventListener("submit", async (e) => {
@@ -25,7 +25,7 @@ chatForm.addEventListener("submit", async (e) => {
 
   try {
     // Send the user's question in the `messages` format the Worker expects.
-    const response = await fetch(wonderwoman9URL, {
+    const response = await fetch(mohamedHasnaaURL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
