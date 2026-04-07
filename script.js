@@ -24,20 +24,27 @@ chatForm.addEventListener("submit", async (e) => {
   chatWindow.textContent = "Thinking...";
 
   try {
-    // Send the user's question to your Worker URL.
+    // Send the user's question in the `messages` format the Worker expects.
     const response = await fetch(wonderwoman9URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ message: question }),
+      body: JSON.stringify({
+        messages: [{ role: "user", content: question }],
+      }),
     });
+
+    if (!response.ok) {
+      chatWindow.textContent = `Request failed (${response.status}).`;
+      return;
+    }
 
     const data = await response.json();
 
-    // Show whichever text field is returned by the API.
+    // Read the OpenAI-style response returned by your Worker.
     chatWindow.textContent =
-      data.reply || data.response || data.message || "No response received.";
+      data.choices?.[0]?.message?.content || "No response received.";
   } catch (error) {
     chatWindow.textContent = "Something went wrong. Please try again.";
   }
