@@ -44,7 +44,8 @@ chatForm.addEventListener("submit", async (e) => {
     chatWindow.textContent =
       data.choices?.[0]?.message?.content || "No response received.";
   } catch (error) {
-    chatWindow.textContent = "Something went wrong. Please try again.";
+    chatWindow.textContent =
+      "Connection failed. Check your Cloudflare Worker URL and CORS settings.";
   }
 
   // Clear the input box for the next message.
