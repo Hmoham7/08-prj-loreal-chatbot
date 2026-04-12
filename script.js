@@ -4,6 +4,8 @@ const userInput = document.getElementById("userInput");
 const chatWindow = document.getElementById("chatWindow");
 
 const mohamedHasnaaURL = "https://mohamed-hasnaa.hmoham7.workers.dev/";
+const systemPrompt =
+  "You are a L'Oréal beauty assistant. Keep every answer focused on makeup, skincare, haircare, fragrance, or beauty routines. If the user asks about something unrelated, gently steer them back to beauty topics. Use simple, beginner-friendly language. Do not use markdown headings, raw hashtag symbols, code blocks, or long lists unless they are truly helpful. Keep responses concise and practical.";
 
 function addMessage(text, type) {
   const message = document.createElement("div");
@@ -11,6 +13,13 @@ function addMessage(text, type) {
   message.textContent = text;
   chatWindow.appendChild(message);
   chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+function cleanReply(text) {
+  return text
+    .replace(/^#{1,6}\s*/gm, "")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 }
 
 // Show the first message when the page loads.
@@ -38,7 +47,10 @@ chatForm.addEventListener("submit", async (e) => {
     const response = await fetch(mohamedHasnaaURL, {
       method: "POST",
       body: JSON.stringify({
-        messages: [{ role: "user", content: question }],
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: question },
+        ],
       }),
     });
 
@@ -48,9 +60,9 @@ chatForm.addEventListener("submit", async (e) => {
       return;
     }
 
-    const data = await response.json();
-    const reply =
-      data.choices?.[0]?.message?.content || "No response received.";
+    const reply = cleanReply(
+      data.choices?.[0]?.message?.content || "No response received.",
+    );
 
     // Replace the loading message with the assistant reply.
     chatWindow.lastElementChild.remove();
