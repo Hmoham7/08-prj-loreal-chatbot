@@ -42,10 +42,13 @@ chatForm.addEventListener("submit", async (e) => {
   addMessage("Thinking...", "ai");
 
   try {
-    // Send a plain text body (still JSON formatted) to avoid a CORS preflight.
-    // The Worker can still parse this with request.json().
+    // Send a JSON body with headers the worker can read directly.
     const response = await fetch(mohamedHasnaaURL, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
       body: JSON.stringify({
         messages: [
           { role: "system", content: systemPrompt },
@@ -60,6 +63,7 @@ chatForm.addEventListener("submit", async (e) => {
       return;
     }
 
+    const data = await response.json();
     const reply = cleanReply(
       data.choices?.[0]?.message?.content || "No response received.",
     );
