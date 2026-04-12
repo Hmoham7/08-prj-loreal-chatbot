@@ -73,26 +73,37 @@ body {
   border-top: 3px solid var(--brand-gold);
   border-radius: 12px;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
   font-size: 18px;
   line-height: 1.5;
   overflow-y: auto;
   background: var(--brand-white);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
-  white-space: pre-line;
 }
 
 /* messages */
 .msg {
-  margin-bottom: 14px;
+  max-width: 85%;
+  padding: 12px 14px;
+  border-radius: 16px;
   line-height: 1.5;
+  white-space: pre-line;
 }
 
 .msg.user {
+  align-self: flex-end;
   color: var(--brand-black);
+  background: #efe8da;
+  border-bottom-right-radius: 4px;
 }
 
 .msg.ai {
+  align-self: flex-start;
   color: var(--brand-muted);
+  background: #f7f4ef;
+  border-bottom-left-radius: 4px;
 }
 
 /* input row */

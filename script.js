@@ -3,10 +3,18 @@ const chatForm = document.getElementById("chatForm");
 const userInput = document.getElementById("userInput");
 const chatWindow = document.getElementById("chatWindow");
 
-// Show the first message when the page loads.
-chatWindow.textContent = "👋 Hello! How can I help you today?";
-
 const mohamedHasnaaURL = "https://mohamed-hasnaa.hmoham7.workers.dev/";
+
+function addMessage(text, type) {
+  const message = document.createElement("div");
+  message.className = `msg ${type}`;
+  message.textContent = text;
+  chatWindow.appendChild(message);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+// Show the first message when the page loads.
+addMessage("👋 Hello! How can I help you today?", "ai");
 
 /* Run this code when the user clicks Send */
 chatForm.addEventListener("submit", async (e) => {
@@ -16,12 +24,13 @@ chatForm.addEventListener("submit", async (e) => {
 
   // Stop early if the input is empty.
   if (!question) {
-    chatWindow.textContent = "Please type a question first.";
+    addMessage("Please type a question first.", "ai");
     return;
   }
 
-  // Show a loading message while waiting for the server.
-  chatWindow.textContent = "Thinking...";
+  // Show the user's message and a loading message while waiting for the server.
+  addMessage(question, "user");
+  addMessage("Thinking...", "ai");
 
   try {
     // Send a plain text body (still JSON formatted) to avoid a CORS preflight.
@@ -34,18 +43,24 @@ chatForm.addEventListener("submit", async (e) => {
     });
 
     if (!response.ok) {
-      chatWindow.textContent = `Request failed (${response.status}).`;
+      chatWindow.lastElementChild.remove();
+      addMessage(`Request failed (${response.status}).`, "ai");
       return;
     }
 
     const data = await response.json();
-
-    // Read the OpenAI-style response returned by your Worker.
-    chatWindow.textContent =
+    const reply =
       data.choices?.[0]?.message?.content || "No response received.";
+
+    // Replace the loading message with the assistant reply.
+    chatWindow.lastElementChild.remove();
+    addMessage(reply, "ai");
   } catch (error) {
-    chatWindow.textContent =
-      "Connection failed. Check your Cloudflare Worker URL and CORS settings.";
+    chatWindow.lastElementChild.remove();
+    addMessage(
+      "Connection failed. Check your Cloudflare Worker URL and CORS settings.",
+      "ai",
+    );
   }
 
   // Clear the input box for the next message.
